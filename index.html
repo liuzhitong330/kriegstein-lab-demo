@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cortical Arealization: PFC Identity by Cell Type — Cathy Liu</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font-family: Georgia, serif; max-width: 720px; margin: 0 auto;
+         padding: 2.5rem 1.5rem 4rem; line-height: 1.65; color: #222; background: #fff; }
+  h1, h2, h3 { font-family: -apple-system, system-ui, sans-serif; }
+  h1 { font-size: 1.45rem; margin-bottom: .2rem; }
+  .byline { font-family: system-ui, sans-serif; font-size: .85rem; color: #777; margin-bottom: 2rem; }
+  h2 { font-size: 1.1rem; margin-top: 2.5rem; border-bottom: 1px solid #eee; padding-bottom: .3rem; }
+  .note { background: #f6f6f4; border-left: 3px solid #999; padding: .8rem 1rem;
+          font-family: system-ui, sans-serif; font-size: .85rem; color: #444; margin: 1.2rem 0; }
+  figure { margin: 1.2rem 0; }
+  figure img { max-width: 100%; display: block; }
+  figcaption { font-family: system-ui, sans-serif; font-size: .78rem; color: #777; margin-top: .4rem; }
+  a { color: #2255aa; }
+  .meta { font-family: system-ui, sans-serif; font-size: .8rem; color: #888;
+          margin-top: 3rem; border-top: 1px solid #eee; padding-top: 1rem; }
+  .tag { display: inline-block; font-family: system-ui, sans-serif; font-size: .75rem;
+         background: #eef2f8; color: #2255aa; padding: .15rem .5rem;
+         border-radius: 3px; margin-right: .3rem; }
+  .highlight  { background: #fff5f5; border-left: 3px solid #c0392b; padding: .6rem 1rem;
+                font-family: system-ui, sans-serif; font-size: .88rem; margin: 1rem 0; }
+  .highlight2 { background: #f0f8ff; border-left: 3px solid #1a5c8a; padding: .6rem 1rem;
+                font-family: system-ui, sans-serif; font-size: .88rem; margin: 1rem 0; }
+  .highlight3 { background: #f5fff0; border-left: 3px solid #27ae60; padding: .6rem 1rem;
+                font-family: system-ui, sans-serif; font-size: .88rem; margin: 1rem 0; }
+</style>
+</head>
+<body>
+
+<h1>What Makes PFC Different from Visual Cortex? A Cell-Type View from the Kriegstein Lab's Data</h1>
+<div class="byline">Cathy Liu · cathyliu014@gmail.com · personal exploratory project, July 2026</div>
+
+<span class="tag">cortical arealization</span>
+<span class="tag">single-cell transcriptomics</span>
+<span class="tag">radial glia</span>
+<span class="tag">human cortex development</span>
+<span class="tag">MAST</span>
+<span class="tag">Python</span>
+
+<p style="margin-top:1.2rem">
+The
+<a href="https://www.kriegsteinlab.com/" target="_blank">Kriegstein lab</a>
+has spent years working out how the human neocortex acquires its regional identity —
+why the prefrontal cortex (PFC) develops differently from the visual cortex (V1), and when those
+differences emerge during gestation. Their 2021 <em>Nature</em> cortical arealization paper
+(<a href="https://www.nature.com/articles/s41586-021-03952-y" target="_blank">Bhaduri et al., 2021</a>)
+showed that areal identity is encoded early, in progenitor cells, before the neurons even finish
+migrating. The lab released the full marker gene table from that paper on
+<a href="https://github.com/kriegstein-lab/cortical-arealization" target="_blank">GitHub</a>.
+</p>
+
+<p>
+I re-analyzed the MAST differential expression results from that repo to ask:
+<em>Which genes most reliably distinguish PFC from other cortical areas, and do these markers
+behave the same way across the three major progenitor and neuron classes?</em>
+</p>
+
+<div class="note">
+<strong>What this is.</strong> Personal exploratory re-analysis of published data, not novel research.
+MAST marker table downloaded directly from
+<a href="https://github.com/kriegstein-lab/cortical-arealization" target="_blank">github.com/kriegstein-lab/cortical-arealization</a>
+(25,071 rows; Bhaduri et al. 2021). Markers are defined by significant log fold change of
+PFC vs. all other profiled areas (motor, parietal, somatosensory, temporal, V1),
+MAST test, p_adj &lt; 0.05. Three cell types: radial glia (RG), intermediate progenitor cells (IPC),
+neurons.
+</div>
+
+<h2>Each cell type has a distinct set of PFC-enriched genes</h2>
+
+<figure>
+  <img src="pfc_markers.svg?v=1"
+       alt="Lollipop chart of top PFC-enriched genes per cell type">
+  <figcaption>Top PFC-enriched marker genes by cell type in early developmental stage.
+  Log fold change from MAST test (PFC vs. other cortical areas), p_adj &lt; 0.05.
+  Data: Bhaduri et al. 2021 (<a href="https://github.com/kriegstein-lab/cortical-arealization" target="_blank">Kriegstein lab GitHub</a>).</figcaption>
+</figure>
+
+<div class="highlight2">
+<strong>HOPX — an outer radial glia marker — is enriched in PFC radial glia (logFC = 0.80, p_adj = 0.034).</strong>
+HOPX marks outer radial glia (oRG), a basal progenitor subtype dramatically expanded in the human
+cortex relative to rodents. oRG cells are thought to be particularly abundant in PFC, driving the
+disproportionate expansion of frontal areas during human evolution. Bhaduri et al. directly mapped
+this: PFC-enriched RG identity is one of the earliest molecular signatures distinguishing frontal
+from occipital cortex.
+</div>
+
+<div class="highlight">
+<strong>NEUROG1 (logFC = 1.07) is one of the strongest PFC markers specifically in early neurons.</strong>
+NEUROG1 is a proneural basic helix-loop-helix transcription factor that drives the transition from
+progenitor to neuron. Its PFC enrichment in neurons — but not in RG — suggests that frontal cortex
+produces early-born neurons with a distinct transcriptional identity, before the laminar migration
+program even completes. This is consistent with the idea that areal identity is "pre-programmed"
+in progenitors and transmitted to their neuronal daughters.
+</div>
+
+<div class="highlight3">
+<strong>IPC markers show a different profile: histone variants (HIST1H4C, H2AFZ) dominate the PFC signal in IPCs.</strong>
+Intermediate progenitor cells bridge the RG and neuron stages. The enrichment of histone genes
+suggests chromatin accessibility differences in PFC-versus-other IPCs — a potential link to the
+3D genome organization work the lab has been pursuing in more recent papers on cortical
+neurogenesis. The accessibility of different chromatin states in IPCs could determine which
+gene programs are opened in newly-born neurons.
+</div>
+
+<h2>PFC enrichment is established early — but genes differ in how they change over time</h2>
+
+<figure>
+  <img src="stage_dynamics.svg?v=1"
+       alt="Bar chart of RG marker expression across developmental stages">
+  <figcaption>Log fold change (PFC enrichment) for four radial glia markers across early, mid,
+  and late developmental stages. Missing bar = not significant at that stage.
+  Data: Bhaduri et al. 2021, MAST test, p_adj &lt; 0.05.</figcaption>
+</figure>
+
+<div class="highlight2">
+<strong>HOPX shows increasing PFC enrichment from early (0.80) to mid-stage (0.90) — it is not a
+transient early marker.</strong>
+This rising trajectory suggests HOPX-positive oRG cells in PFC expand or become more transcriptionally
+distinct mid-gestation. It is consistent with the idea that outer radial glia-driven expansion is
+a continuing process, not just a one-time specification event.
+</div>
+
+<div class="highlight3">
+<strong>CLU (Clusterin) peaks early (logFC = 0.92) and falls off significantly by late stage (0.36).</strong>
+CLU encodes a secreted glycoprotein with roles in stress response and cell survival. Its sharp
+early enrichment in PFC radial glia, followed by decline, points to a transient identity signature —
+possibly related to PFC-specific niche signaling in the early ventricular zone that becomes
+less relevant as the progenitor pool depletes. The contrast between CLU and HOPX trajectories
+illustrates that "PFC identity" is not a single state but an evolving program.
+</div>
+
+<h2>Connection to the lab's work</h2>
+<ul>
+<li>
+<strong>Cortical arealization (Bhaduri et al. 2021):</strong> This re-analysis extends the paper's
+areal marker analysis by examining temporal dynamics and asking which markers are early-and-transient
+vs. maintained across stages — a distinction the paper does not highlight explicitly but that is
+derivable from the released MAST data.
+</li>
+<li>
+<strong>3D genome / chromatin during neurogenesis:</strong> The IPC histone variant signature
+suggests a chromatin accessibility angle that connects to the lab's newer work on 3D genome
+organization in cortical progenitors. The question of <em>which regulatory elements are opened
+in PFC-vs-other IPCs</em> seems like a natural follow-up that would require the kind of
+paired snRNA-seq/snATAC-seq or Hi-C profiling the lab now routinely does.
+</li>
+<li>
+<strong>Spatial transcriptomics:</strong> These bulk MAST markers don't resolve spatial position
+within a cortical area. Mapping HOPX and NEUROG1 expression gradients across the VZ/SVZ at
+spatially resolved resolution — using the spatial tools the lab has been developing — would
+let you ask whether PFC enrichment reflects subregional differences within PFC, or a uniform
+PFC-wide signature.
+</li>
+<li>
+On the experimental side, I have hands-on experience with mammalian cell culture, fluorescence
+microscopy, flow cytometry, and RNA/protein-level assays. I've also applied scRNA-seq analysis
+computationally. I'm comfortable contributing across both experimental and computational aspects.
+</li>
+</ul>
+
+<h2>Methods</h2>
+<p>
+Data retrieved July 2026 from the Kriegstein lab GitHub repository
+(<a href="https://github.com/kriegstein-lab/cortical-arealization" target="_blank">cortical-arealization</a>),
+file <code>neocortex/markers/tbls_in/markers_by_celltype_indiv_all_MAST.txt</code>
+(25,071 rows). Markers selected by: area = "pfc", p_val_adj &lt; 0.05, max avg_logfc
+per gene per cell type per stage. Cell types: radial glia (rg), intermediate progenitor cells (ipc),
+neurons (neuron). Developmental stages: early, mid, late. Non-coding RNA and mitochondrial gene
+prefixes (MT-, AC0, MIR, LINC) excluded from Figure 1 for clarity.
+Figures: pure Python SVG. Code:
+<a href="fetch_data.py">fetch_data.py</a>, <a href="make_figures.py">make_figures.py</a>.
+Raw tables: <a href="pfc_markers_early.tsv">pfc_markers_early.tsv</a>,
+<a href="stage_dynamics.tsv">stage_dynamics.tsv</a>.
+</p>
+
+<div class="meta">
+Cathy Liu — cathyliu014@gmail.com | 415-216-3799<br>
+<a href="https://liuzhitong330.github.io/tvb-llm-robust-neurostim/" target="_blank">Epilepsy neurostimulation project</a> ·
+<a href="https://arxiv.org/abs/2606.04339" target="_blank">arXiv:2606.04339</a>
+</div>
+
+</body>
+</html>
